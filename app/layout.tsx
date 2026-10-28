@@ -4,7 +4,7 @@ import "@pimolu/web-styles/styles.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Pimolu UI — Next.js Starter",
+  title: "Pimolu UI: Next.js Starter",
   description: "A minimal Next.js starter built with Pimolu UI.",
 };
 

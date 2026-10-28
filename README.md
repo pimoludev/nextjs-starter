@@ -1,13 +1,15 @@
-# Pimolu UI — Next.js Starter
+# Pimolu UI: Next.js Starter
 
 A minimal Next.js 16 starter built with the published [Pimolu UI](https://pimolu.com) packages, TypeScript, Tailwind CSS, and the App Router.
+
+![Preview of the Pimolu UI Next.js starter](public/preview.png)
 
 > Pimolu UI is currently in **beta**. This starter pins `@pimolu/react` and `@pimolu/web-styles` to `0.1.0-beta.3.1`. Do not bump those versions without re-checking the component APIs and styles.
 
 ## Requirements
 
 - Node.js **22.12+** (or 24+); the exact baseline is in `.nvmrc`
-- npm **10+** — this repository is locked with `package-lock.json`, use npm rather than yarn/pnpm/bun
+- npm **10+**. This repository is locked with `package-lock.json`, so use npm rather than yarn/pnpm/bun.
 
 ## Getting started
 

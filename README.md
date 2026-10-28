@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pimolu UI — Next.js Starter
 
-## Getting Started
+A minimal Next.js 16 starter built with the published [Pimolu UI](https://pimolu.com) packages, TypeScript, Tailwind CSS, and the App Router.
 
-First, run the development server:
+> Pimolu UI is currently in **beta**. This starter pins `@pimolu/react` and `@pimolu/web-styles` to `0.1.0-beta.3.1`. Do not bump those versions without re-checking the component APIs and styles.
 
-```bash
+## Requirements
+
+- Node.js **22.12+** (or 24+); the exact baseline is in `.nvmrc`
+- npm **10+** — this repository is locked with `package-lock.json`, use npm rather than yarn/pnpm/bun
+
+## Getting started
+
+```sh
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Edit `app/page.tsx`; the page updates on save.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command             | Description                                              |
+| ------------------- | -------------------------------------------------------- |
+| `npm run dev`       | Start the development server (Turbopack)                 |
+| `npm run lint`      | Run ESLint with the flat config                          |
+| `npm run typecheck` | Generate Next.js route types, then run `tsc --noEmit`    |
+| `npm run build`     | Create a production build                                |
+| `npm run start`     | Serve the production build                               |
 
-## Learn More
+No test runner or CI/CD pipeline is configured. Lint, typecheck, and build are the local checks for this starter.
 
-To learn more about Next.js, take a look at the following resources:
+### Why `next typegen` before `tsc`?
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Next.js 16 generates `PageProps`, `LayoutProps`, and `RouteContext` into `.next/types`. `next-env.d.ts` is gitignored, so a bare `tsc --noEmit` fails on a clean checkout. `npm run typecheck` handles the generation step for you.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Pimolu UI setup
 
-## Deploy on Vercel
+- `app/layout.tsx` imports `@pimolu/web-styles/styles.css` **before** `app/globals.css`, then wraps the app in `<PimoluProvider defaultTheme="system">`.
+- Import components from `@pimolu/react`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```tsx
+import { Button } from "@pimolu/react";
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+export function Example() {
+  return <Button appearance="outline">Hello Pimolu</Button>;
+}
+```
+
+- Pimolu components are client components. A page that passes event handlers must be a client component (as `app/page.tsx` is).
+- The starter page uses Pimolu layout and UI components (`Box`, `VStack`, `HStack`, `Heading`, `Text`, `Code`, `Button`, `Link`). Page-level layout CSS lives in `app/globals.css`.
+- Tailwind v4 is compiled by the `@tailwindcss/turbopack` loader configured in `next.config.ts`; there is no PostCSS config or `tailwind.config.*`.
+- The provider follows the system light/dark preference by default. Pass `defaultTheme="light"` or `defaultTheme="dark"` to change the starting theme, and `defaultStylePreset` for a Pimolu preset.
+
+### Pimolu resources
+
+- [Components](https://pimolu.com/components)
+- [Documentation](https://pimolu.com/docs)
+- [Showcase](https://pimolu.com/showcase)
+- [Pimolu UI on GitHub](https://github.com/pimoludev/ui)
+
+## Next.js 16 notes
+
+- `cacheComponents` and `partialPrefetching` are enabled in `next.config.ts`. Data is dynamic by default; cache with `"use cache"` and wrap uncached async reads in `<Suspense>`.
+- Cache Components requires the Node.js runtime. Do not add `export const runtime`.
+- Version-matched Next.js documentation is bundled at `node_modules/next/dist/docs/`. Read it before using unfamiliar routing, caching, or metadata APIs.
+- `AGENTS.md` contains repo-specific guidance for coding agents. Its top block is managed by `next dev`; keep it in the file.
+
+## Project structure
+
+```text
+app/
+  globals.css    Tailwind entry and starter page styles
+  layout.tsx     Pimolu provider, global CSS imports, metadata
+  page.tsx       Starter page built with Pimolu components
+AGENTS.md
+next.config.ts
+```
+
+## Deployment
+
+The app has no environment variables or external services. Build with `npm run build`, then serve with `npm run start`, or deploy to a Node.js host such as Vercel. The route is currently statically prerendered.
+
+## Tests
+
+There is no test suite yet. If you add application logic, add a runner (for example Vitest for units or Playwright for flows). The starter itself is intentionally limited to the UI shell.
+
+## License
+
+[MIT](./LICENSE) © 2026 Pimolu
